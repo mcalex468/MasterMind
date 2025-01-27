@@ -32,8 +32,6 @@ function añadeColor(color) {
    
 }
 
-  git config --global user.email "alexmaco468@gmail.com"
-  git config --global user.name "mcalex468"
 
 /** Template con el código HTML que corresponde a cada fila de juego/intento. */
 const ROW_RESULT = `<div class="rowResult w100 flex wrap">
