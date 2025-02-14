@@ -15,7 +15,7 @@ var aciertos = 0;
 
 function init() {
     //1. Genera el código random del master
-    //masterColors()
+    masterColors()
     //2. Crea todas las filas según el número de intentos.
     filasJuego()
 }
@@ -29,28 +29,28 @@ function masterColors() {
         master.push(COLORS[i]);
     }
     return master;
-    master.appendChild(colorsMaster);
+    //master.appendChild(colorsMaster);
 }
-
-console.log(masterColors());
 
 
 // Función para añadir un color a la combinación del usuario
 function añadeColor(color) {
-    // Verificar si el usuario ya ha seleccionado 4 colores
     if (userCombi.length < MAX_COMBI_COLORES) {
-        // Añadir a la lista
         userCombi.push(color);
-        // Actualizar el campo de texto con los colores seleccionados
-        let colorSelect = document.getElementById('combiText');
-        colorSelect.value = userCombi.join(' , '); // Agregar el color con coma
+        document.getElementById('combiText').value = userCombi.join(', ');
 
+        // Pintar los colores en la fila correspondiente
+        let filaActual = document.querySelectorAll('.rowResult')[intento];
+        // Obtener la fila del intento actual
+        let celdas = filaActual.querySelectorAll('.celUserCombi');
+        // Seleccionar las 4 celdas
+
+        celdas[userCombi.length - 1].style.backgroundColor = color;
+        // Pintar celda con el color elegido
     } else {
-        // Si ya se han seleccionado 4 colores, no hacer nada o mostrar mensaje de error
         alert('Ya has seleccionado 4 colores.');
     }
 }
-
 
 
 function filasJuego() {
@@ -67,9 +67,65 @@ function filasJuego() {
 introducido el usuario.
 Informamos al usuario del resultado y del número de intentos que lleva*/
 function Comprobar() {
-    // switch case
-    // usar variables globales
+    // Verificacion de colores elegidos por el usuario
+    if (userCombi.length !== MAX_COMBI_COLORES) {
+        alert('Selecciona 4 colores antes de comprobar.');
+        return;
+    }
+
+    let filaActual = document.querySelectorAll('.rowResult')[intento];
+    let resultadoCeldas = filaActual.querySelectorAll('.cercleResult');
+
+    let aciertosExactos = 0;
+
+    // Buscar coincidencias exactas (Negros)
+    for (let i = 0; i < MAX_COMBI_COLORES; i++) {
+        if (userCombi[i] === master[i]) {
+            aciertosExactos++;
+            resultadoCeldas[i].style.backgroundColor = BLACK;
+        } 
+        // Buscar coincidencias de color (Blancos)
+        else if (master.includes(userCombi[i])) {
+            resultadoCeldas[i].style.backgroundColor = WHITE;
+        }
+    }
+
+    intento++; 
+
+    // Verificar Resultado
+    resultado(aciertosExactos);
+
+    // Reiniciar la combinación
+    userCombi.length = 0;
+    document.getElementById('combiText').value = '';
 }
+
+
+
+
+function resultado(aciertosExactos) {
+    if (aciertosExactos === MAX_COMBI_COLORES) {
+        document.getElementById('info').textContent = `¡Felicidades! Has acertado la combinación en ${intento} intentos.`;
+        mostrarMaster();
+    } else if (intento >= MAX_INTENTOS) {
+        document.getElementById('info').textContent = 'Has alcanzado el máximo de intentos. ¡Inténtalo de nuevo!';
+        mostrarMaster();
+    } else {
+        document.getElementById('info').textContent = `Intento ${intento}: Sigue intentándolo, tu puedes.`;
+    }
+}
+
+
+function mostrarMaster() {
+    // Selector del master
+    let masterCeldas = document.querySelectorAll('#master .cel');
+
+    for (let i = 0; i < master.length; i++) {
+        // Accedemos al master, para pintar con los colores aleatorios generados
+        masterCeldas[i].style.backgroundColor = master[i];
+    };
+}
+
 
 
 
