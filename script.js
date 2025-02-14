@@ -35,15 +35,22 @@ function masterColors() {
 console.log(masterColors());
 
 
-/** Procedimiento que se ejecuta cada vez que el usuario selecciona un color, hasta el número máximo de colores permitidos en la combinación. */
+// Función para añadir un color a la combinación del usuario
 function añadeColor(color) {
-    do {
-        let colorSelect = document.getElementById('combiText');  // Obtener el campo de texto
-        colorSelect.value += color + " ,";  // Añadir el color al valor del campo de texto
-        intento++
-    } while (intento < 5)
-    
+    // Verificar si el usuario ya ha seleccionado 4 colores
+    if (userCombi.length < MAX_COMBI_COLORES) {
+        // Añadir a la lista
+        userCombi.push(color);
+        // Actualizar el campo de texto con los colores seleccionados
+        let colorSelect = document.getElementById('combiText');
+        colorSelect.value = userCombi.join(' , '); // Agregar el color con coma
+
+    } else {
+        // Si ya se han seleccionado 4 colores, no hacer nada o mostrar mensaje de error
+        alert('Ya has seleccionado 4 colores.');
+    }
 }
+
 
 
 function filasJuego() {
